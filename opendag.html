@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leerlingenraad Lorentzlyceum</title>
+    <link rel="stylesheet" type="text/css" href="leerlingenraad.css">
+</head>
+<body>
+    <header>
+        <img src="logo-leerlingenraad.png" alt="logo" width="60" height="60">
+        
+ 
+    <nav class="main-menu"> 
+        <a href="over_ons.html">Over ons</a>
+        <a href="onze_rol.html">Onze rol</a>
+        <a href="Activiteiten.html">Activiteiten</a>
+    </nav> 
+   <div class="hamburger-menu" onclick="toggleMenu()">&#9776;</div>
+     <div id="hamburger-menu" class="hidden-menu">
+        <ul> 
+            <li><a href="over_ons.html">Over ons</a></li>
+            <li><a href="Onze_rol.html">Onze rol</a></li>
+            <li><a href="Activiteiten.html">Activiteiten</a></li>
+            <li><a href="Onze_leden.html">Leden</a></li>
+        </ul>
+    </div>
+     </header>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("hamburger-menu");
+      menu.classList.toggle("show");
+    }
+  </script>
+  <div class="achtergrond-foto">
+    <h1> De leerlingenraad </h1>
+    <p> Welkom op de website van de leerlingenraad! Wij zijn een groep enthousiaste leerlingen uit allerlei jaarlagen die zich inzetten om onze school nog beter en leuker te maken. Hier vind je alles over wie wij zijn, wat we doen en hoe jij ook jouw stem kunt laten horen. Samen zorgen we ervoor dat elke leerling mee kan denken en praten over wat er op school gebeurt.</p>
+  </div>
+<footer class="footer-achtergrond">
+  <div class="footer-content">
+    <div class="footer-grid">
+
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <p><strong>Mail:</strong> 
+          <a href="mailto:leerlingenraad@lorentzlyceum.nl">
+            leerlingenraad@lorentzlyceum.nl
+          </a>
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Locatie</h3>
+        <p>Metamorfosenallee 100<br>6843 HX Arnhem</p>
+        <p>
+          <a href="https://maps.google.com/?q=Metamorfosenallee+100,+Arnhem" target="_blank">
+            Bekijk op Google Maps
+          </a>
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Telefoon</h3>
+        <p>
+          <a href="tel:0263202850">026-320 28 50</a>
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Instagram</h3>
+        <a href="https://www.instagram.com/leerlingenraad_ll" target="_blank" aria-label="Instagram">
+          @leerlingenraad_ll
+        </a>
+    </div>
+    </div>
+
+    
+    <div class="footer-bottom">
+      <p>© 2025 Lorentz Lyceum | Leerlingenraad</p>
+    </div>
+
+  </div>
+</footer>
+</body>
+</html>
+

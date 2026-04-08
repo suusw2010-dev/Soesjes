@@ -1,0 +1,507 @@
+body{ 
+    margin: 0;
+    font-family: arial, sans-serif;
+}
+
+header{ 
+    display: flex;                  
+    align-items: center;             
+    background-color: #d0e0ff;          
+    padding: 10px 20px;   
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    justify-content: space-between;
+}
+.hamburger-menu {
+    font-size: 35px;
+    cursor: pointer;
+    color: rgb(255, 0, 0);
+    display: block;
+    width: 50px;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+    position: relative;
+    z-index: 9999;
+}
+.hidden-menu {
+  display: none;
+  position: absolute;
+  top: 60px;     
+  right: 20px; 
+  background-color: #afc8f9;        
+  padding: 15px 25px;
+  border-radius: 12px;
+  z-index: 10000;
+}
+.hidden-menu.show {
+  display:block
+}
+.hidden-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hidden-menu ul li {
+  margin: 10px 0;
+}
+
+.hidden-menu ul li a {
+  color: rgb(253, 5, 5);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+h1 { 
+  color:#000000;
+  margin-top: 40px;
+  margin-left: 40px;
+  font-size: xxx-large;
+  text-shadow:
+  -1px -1px 0 rgb(255, 255, 255),
+  1px -1px 0 rgb(255, 255, 255),
+  -1px 1px 0 rgb(255, 255, 255),
+  1px 1px 0 rgb(255, 255, 255);
+  opacity: 10;
+}
+p {
+  font-size: x-large;
+  margin-left: 40px;
+  margin-right: 50px;
+  text-shadow:
+    -1px -1px 0 rgb(255, 255, 255),
+  1px -1px 0 rgb(255, 255, 255),
+  -1px 1px 0 rgb(255, 255, 255),
+  1px 1px 0 rgb(255, 255, 255);
+  line-height: 1.5;
+}
+.achtergrond-foto { 
+  position: relative;
+  background: url(lorentzlyceum.webp) no-repeat center/cover;
+  padding: 60px;
+  color:black;
+  width:100%;
+  min-height: 300px;
+  display: block;
+  margin: 0 auto;
+  z-index: 0;
+}
+.achtergrond-foto::before {
+  content: "";
+  position: absolute;
+  inset:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+  pointer-events: none
+}
+.achtergrond-foto h1,
+.achtergrond-foto p {
+  position: relative;
+  z-index: 2;
+}
+nav a { 
+  text-decoration: none;
+  color:rgb(255, 0, 0);
+  font-weight: bold;
+  margin: 0 20px;
+  font-size: 18px;
+  transition: color 0.2s, border-bottom 0.2s;
+}
+nav a:hover {
+  color: #333;
+  border-bottom: 2px solid #e63946;
+  padding-bottom: 4px;
+}
+header img { 
+  height: 100px;
+  width: auto;
+}
+.main-menu a {
+    color: rgb(253, 5, 5);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.footer-achtergrond {
+  position: relative;
+  background: url("logoLorentzlyceum.jpeg") no-repeat center/cover;
+  background-color: #fff;
+  padding: 60px 20px 30px;
+}
+
+.footer-achtergrond::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.9);
+}
+
+.footer-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "Poppins", Arial, sans-serif;
+  color: #1a1a1a;
+}
+
+/* GRID – nu 4 kolommen */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  text-align: left;
+}
+
+.footer-col h3 {
+  color: #004aad;
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.footer-col p {
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.footer-col a {
+  color: #061b92;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.footer-col a:hover {
+  color: #004aad;
+  text-decoration: underline;
+}
+
+
+/* Onderaan de footer */
+.footer-bottom {
+
+  margin-top: 30px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  font-size: 1px;
+  color: #333;
+letter-spacing: 0.5px;
+}
+
+/* leesbreedte (laat staan als je al een wrapper hebt) */
+.content{ max-width: 860px; margin: 36px auto; padding: 0 18px; }
+
+/* H1: minder schreeuwerig, stijlvol accent */
+.content h1{
+  color:#111;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.2;
+  margin: 0 0 18px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  position: relative;
+}
+
+
+/* H2: rustig, strak, uitgelijnd met tekst (geen lijnen) */
+.content h2{
+  color:#222;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 0;
+  padding-left: 0;            /* geen extra inspringing */
+  border: 0;             /* zeker weten: geen strepen */
+  text-transform: none;  
+}
+
+/* Tekst: prettige regelafstand en kleur */
+.content p{
+  margin-left: 0;
+  padding-left: 0;
+  font-size: 1em;
+  line-height: 1.75;
+  color:#444;
+  margin: 20px 0 10px 0;
+}
+.onze_rol { max-width: 860px; margin: 36px auto; padding: 0 18px; }
+
+/* H1: minder schreeuwerig, stijlvol accent */
+.onze_rol h1{
+  color:#111;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.2;
+  margin: 0 0 10px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  position: relative;
+}
+
+
+/* H2: rustig, strak, uitgelijnd met tekst (geen lijnen) */
+.onze_rol h2{
+  color:#222;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 0;
+  padding-left: 0;            /* geen extra inspringing */
+  border: 0;             /* zeker weten: geen strepen */
+  text-transform: none;  
+}
+
+/* Tekst: prettige regelafstand en kleur */
+.onze_rol p{
+  margin-left: 0;
+  padding-left: 0;
+  font-size: 1em;
+  line-height: 1.75;
+  color:#444;
+  margin: 20px 0 10px 0;
+}
+
+/* ===== ACTIVITEITENPAGINA ===== */
+
+.activiteiten-content {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+.activiteiten-content h1 {
+  text-align: center;
+  color: #004aad;
+  margin-bottom: 40px;
+}
+
+/* één activiteit: foto links, tekst rechts */
+.activiteit-item {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.activiteit-item img {
+  width: 200px;              /* pas aan als je groter/kleiner wilt */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  object-fit: cover;
+}
+
+.activiteit-info h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #004aad;
+}
+
+.activiteit-info p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+/* Mobiel: alles onder elkaar */
+@media (max-width: 768px) {
+  .activiteit-item {
+    flex-direction: column;
+  }
+
+  .activiteit-item img {
+    width: 100%;
+  }
+}
+
+/* ===== LEDENPAGINA ===== */
+
+.leden-content {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+/* Pagina titel */
+.leden-content h1 {
+  text-align: center;
+  color: #004aad;
+  margin: 50px 0 30px;
+  font-size: 32px;
+}
+
+/* Een lid (foto links, info rechts) */
+.lid-item {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+/* Foto van het lid */
+.lid-item img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Naam van het lid */
+.lid-info h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: #004aad;
+  font-weight: 700;
+}
+
+/* Bullet points */
+.lid-info ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.7;
+}
+
+.lid-info li {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* ===== MOBIEL ===== */
+@media (max-width: 768px) {
+  .lid-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .lid-item img {
+    margin: 0 auto 15px;
+    width: 60%;
+    height: auto;
+  }
+
+  .lid-info ul {
+    padding-left: 0;
+    list-style-position: inside;
+  }
+}
+/* ===== VERGADERTABEL ===== */
+
+.vergader-tabel {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  margin-top: 10px;
+}
+
+/* Titel boven tabel */
+.tabelblok h2 {
+  color: #004aad;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+/* Kopcellen */
+.vergader-tabel th {
+  background: #004aad;
+  color: white;
+  padding: 12px 10px;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Regels */
+.vergader-tabel td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e6e6e6;
+  color: #333;
+}
+
+/* Laatste rij: geen streep */
+.vergader-tabel tr:last-child td {
+  border-bottom: none;
+}
+
+/* Hover effect – subtiel */
+.vergader-tabel tr:hover {
+  background: #f3f7ff;
+  transition: 0.2s;
+}
+
+/* Layout naast tekst */
+.content-flex {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.tekstblok {
+  flex: 3;
+}
+
+.tabelblok {
+  flex: 1.2;
+}
+
+/* Responsive: onder elkaar op mobiel */
+@media (max-width: 768px) {
+  .content-flex {
+    flex-direction: column;
+  }
+}
+
+.tekstblok { max-width: 860px; margin: 36px auto; padding: 0 18px; }
+
+/* H1: minder schreeuwerig, stijlvol accent */
+.tekstblok h1{
+  color:#111;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.2;
+  margin: 0 0 18px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  position: relative;
+}
+
+
+/* H2: rustig, strak, uitgelijnd met tekst (geen lijnen) */
+.tekstblok h2{
+  color:#222;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 0;
+  padding-left: 0;            /* geen extra inspringing */
+  border: 0;             /* zeker weten: geen strepen */
+  text-transform: none;  
+}
+
+/* Tekst: prettige regelafstand en kleur */
+.tekstblok p{
+  margin-left: 0;
+  padding-left: 0;
+  font-size: 1em;
+  line-height: 1.75;
+  color:#444;
+  margin: 20px 0 10px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
