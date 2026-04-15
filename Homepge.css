@@ -54,7 +54,7 @@ body {
 }
 
 /* COLORS */
-.blue { background: linear-gradient(135deg, #f0fd0092, #f6fc88); }
+.blue { background: linear-gradient(135deg,   #f0fd0092, #f6fc88); }
 .green { background: linear-gradient(135deg, #ff428e, #ffabcc); }
 .purple { background: linear-gradient(135deg, #0077ff, #a5cfff); }
 
