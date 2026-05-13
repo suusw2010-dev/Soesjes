@@ -62,11 +62,10 @@ body {
 .card:hover {
     transform: translateY(-8px);
 }
-
+.green { background: linear-gradient(135deg, #ff428e, #ffabcc); }
+.blue { background: linear-gradient(135deg,   #f0fd0092, #f6fc88); }
+.purple { background: linear-gradient(135deg, #0077ff, #a5cfff); }
 /* COLORS */
-.Yellow { background: linear-gradient(135deg,   #ff428e, #ffabcc); }
-.Pink { background: linear-gradient(135deg, #f0fd0092, #f6fc88); }
-.Blue { background: linear-gradient(135deg, #0077ff, #a5cfff); }
 
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
