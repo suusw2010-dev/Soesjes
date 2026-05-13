@@ -31,6 +31,16 @@ body {
     margin: 20px 0;
 }
 
+.main-menu{ 
+    display: flex;                  
+    align-items: center;             
+    background-color: #f48fb1;          
+    padding: 10px 20px;   
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    justify-content: space-between;
+}
 /* GRID */
 .grid {
     display: grid;
@@ -70,7 +80,7 @@ body {
       min-height: 100vh;
     }
  
-    .tictactoe-page container {
+    .container {
       position: relative;
       display: flex;
       flex-direction: column;
@@ -84,10 +94,10 @@ body {
       width: 95vw;
     }
  
-    .tictactoe-page h1 { font-size: 22px; font-weight: 500; color: #1a1a18; }
+    .h1 { font-size: 22px; font-weight: 500; color: #1a1a18; }
     h2 { font-size: 16px; font-weight: 500; color: #1a1a18; text-align: center; }
  
-    .tictactoe-page button {
+    .button {
       padding: 8px 20px; font-size: 14px; border-radius: 8px;
       border: 1px solid #ccc; background: transparent; color: #1a1a18; cursor: pointer;
     }
