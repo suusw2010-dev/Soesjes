@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soesje Airhockey</title>
+    <link rel="stylesheet" href="Homepge.css">
+</head>
+<header>
+ 
+    <nav class="main-menu"> 
+        <a href="Homepage.html">De Soesjes homepage</a>
+  
+    </nav> 
+    </header>
+<body>
+    <h1>🥐 Soesje Airhockey</h1>
+ 
+<!-- modus kiezen -->
+<div id="mode-row">
+  <span>Modus:</span>
+  <button class="mode-btn active" id="btn-bot">🤖 Vs. Bot</button>
+  <button class="mode-btn"       id="btn-pvp">👥 Multiplayer</button>
+</div>
+ 
+<!-- score -->
+<div id="score-bar">
+  <div class="score-block" id="score-player">
+    <div class="score-label" id="label-player">Jij</div>
+    <div class="score-num">0</div>
+  </div>
+  <div id="status">Kies een modus en druk op Start</div>
+  <div class="score-block" id="score-ai">
+    <div class="score-label" id="label-ai">Bot</div>
+    <div class="score-num">0</div>
+  </div>
+</div>
+ 
+<!-- speelveld -->
+<canvas id="canvas" width="640" height="420"></canvas>
+ 
+<!-- knoppen -->
+<div id="controls">
+  <button class="ctrl" id="btn-start">▶ Start</button>
+  <button class="ctrl" id="btn-reset">↺ Reset</button>
+</div>
+ 
+<div id="hint">Beweeg je muis om de blauwe paddle te besturen</div>
+ 
+<script>
+const canvas = document.getElementById('canvas');
+const ctx    = canvas.getContext('2d');
+ 
+const W = 640, H = 420;
+const PADDLE_W = 86, PADDLE_H = 14;
+const R = 22;
+const GOAL_W = 150;
+ 
+let mode = 'bot';   // 'bot' | 'pvp'
+let state = 'idle'; // 'idle' | 'playing' | 'paused' | 'pause'
+let sp = 0, sa = 0;
+let mouseX = W/2, mouse2X = W/2;
+ 
+const player = { x:W/2, y:H-36, w:PADDLE_W, h:PADDLE_H };
+const aiPad  = { x:W/2, y:36,   w:PADDLE_W, h:PADDLE_H };
+const puck   = { x:W/2, y:H/2, vx:0, vy:0 };
+ 
+/* ui */
+const statusEl = document.getElementById('status');
+const startBtn = document.getElementById('btn-start');
+function setStatus(m){ statusEl.textContent=m; }
+function setScore(who,v){ document.querySelector(`#score-${who} .score-num`).textContent=v; }
+ 
+/* mode buttons */
+document.getElementById('btn-bot').onclick = () => switchMode('bot');
+document.getElementById('btn-pvp').onclick = () => switchMode('pvp');
+ 
+function switchMode(m){
+  mode=m;
+  document.getElementById('btn-bot').className='mode-btn'+(m==='bot'?' active':'');
+  document.getElementById('btn-pvp').className='mode-btn'+(m==='pvp'?' active':'');
+  document.getElementById('label-player').textContent = m==='bot'?'Jij':'Speler 1';
+  document.getElementById('label-ai').textContent     = m==='bot'?'Bot':'Speler 2';
+  document.getElementById('hint').textContent = m==='bot'
+    ? 'Beweeg je muis om de blauwe paddle te besturen'
+    : 'Speler 1: muis onderin · Speler 2: muis bovenin';
+  resetGame();
+}
+ 
+function resetGame(){
+  sp=0; sa=0; setScore('player',0); setScore('ai',0);
+  puck.x=W/2; puck.y=H/2; puck.vx=0; puck.vy=0;
+  player.x=W/2; aiPad.x=W/2;
+  mouseX=W/2; mouse2X=W/2;
+  state='idle'; setStatus('Druk op Start');
+  startBtn.textContent='▶ Start';
+}
+ 
+/* start / pause / reset */
+startBtn.onclick = () => {
+  if(state==='idle'){
+    launchPuck(1); state='playing'; setStatus(''); startBtn.textContent='⏸ Pauze';
+  } else if(state==='playing'){
+    state='paused'; startBtn.textContent='▶ Doorgaan'; setStatus('Gepauzeerd');
+  } else if(state==='paused'){
+    state='playing'; startBtn.textContent='⏸ Pauze'; setStatus('');
+  }
+};
+document.getElementById('btn-reset').onclick = resetGame;
+ 
+/* puck launch */
+function launchPuck(dir){
+  puck.x=W/2; puck.y=H/2;
+  const a=(Math.random()*0.6-0.3)+(dir>0?Math.PI/2:-Math.PI/2);
+  puck.vx=Math.cos(a)*5; puck.vy=Math.sin(a)*5;
+}
+ 
+/* physics */
+function hitPad(pad){
+  const dx=puck.x-pad.x, dy=puck.y-pad.y;
+  if(Math.abs(dx)<pad.w/2+R && Math.abs(dy)<pad.h/2+R){
+    puck.vy*=-1; puck.vx+=dx*0.14;
+    puck.y=pad===player ? pad.y-pad.h/2-R : pad.y+pad.h/2+R;
+    const s=Math.hypot(puck.vx,puck.vy);
+    if(s>0){const c=Math.min(s*1.06,14);puck.vx=puck.vx/s*c;puck.vy=puck.vy/s*c;}
+  }
+}
+ 
+function update(){
+  if(state!=='playing') return;
+  puck.x+=puck.vx; puck.y+=puck.vy;
+  if(puck.x-R<0){puck.x=R;puck.vx*=-1;}
+  if(puck.x+R>W){puck.x=W-R;puck.vx*=-1;}
+ 
+  const gl=(W-GOAL_W)/2, gr=gl+GOAL_W;
+ 
+  if(puck.y+R>H){
+    if(puck.x>gl&&puck.x<gr){
+      sa++; setScore('ai',sa);
+      setStatus(mode==='bot'?'Bot scoort! 😤':'Speler 2 scoort! 🎉');
+      state='pause'; setTimeout(()=>{launchPuck(-1);state='playing';setStatus('');},1100);
+    } else {puck.y=H-R;puck.vy*=-1;}
+  }
+  if(puck.y-R<0){
+    if(puck.x>gl&&puck.x<gr){
+      sp++; setScore('player',sp);
+      setStatus(mode==='bot'?'Jij scoort! 🥐':'Speler 1 scoort! 🥐');
+      state='pause'; setTimeout(()=>{launchPuck(1);state='playing';setStatus('');},1100);
+    } else {puck.y=R;puck.vy*=-1;}
+  }
+ 
+  hitPad(player); hitPad(aiPad);
+ 
+  // top paddle
+  if(mode==='bot'){
+    const t=puck.vy<0?puck.x:W/2;
+    if(aiPad.x<t-4)aiPad.x=Math.min(aiPad.x+4,t);
+    else if(aiPad.x>t+4)aiPad.x=Math.max(aiPad.x-4,t);
+  } else {
+    aiPad.x+=(mouse2X-aiPad.x)*0.28;
+  }
+  aiPad.x=Math.max(aiPad.w/2,Math.min(W-aiPad.w/2,aiPad.x));
+  player.x+=(mouseX-player.x)*0.28;
+  player.x=Math.max(player.w/2,Math.min(W-player.w/2,player.x));
+ 
+  const s=Math.hypot(puck.vx,puck.vy);
+  if(s<4&&s>0){puck.vx=puck.vx/s*4;puck.vy=puck.vy/s*4;}
+  if(s>14){puck.vx=puck.vx/s*14;puck.vy=puck.vy/s*14;}
+}
+ 
+/* drawing */
+function drawRink(){
+  ctx.fillStyle='#1a3a1a'; ctx.fillRect(0,0,W,H);
+ 
+  // veld gloed
+  const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,220);
+  g.addColorStop(0,'rgba(255,255,255,0.04)');g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ 
+  // middenlijn + cirkel
+  ctx.strokeStyle='rgba(255,255,255,0.13)';ctx.lineWidth=1.5;
+  ctx.setLineDash([8,6]);
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();ctx.arc(W/2,H/2,52,0,Math.PI*2);ctx.stroke();
+ 
+  const gl=(W-GOAL_W)/2,gr=gl+GOAL_W;
+  ctx.lineWidth=3;
+  ctx.strokeStyle='rgba(255,80,80,0.9)';
+  ctx.beginPath();ctx.moveTo(gl,H);ctx.lineTo(gr,H);ctx.stroke();
+  ctx.strokeStyle='rgba(80,160,255,0.9)';
+  ctx.beginPath();ctx.moveTo(gl,0);ctx.lineTo(gr,0);ctx.stroke();
+ 
+  ctx.font='bold 11px system-ui';ctx.textAlign='center';
+  ctx.fillStyle='rgba(255,80,80,0.5)'; ctx.fillText('← GOAL →',W/2,H-5);
+  ctx.fillStyle='rgba(80,160,255,0.5)';ctx.fillText('← GOAL →',W/2,13);
+}
+ 
+function drawPaddle(pad,color){
+  ctx.shadowColor=color;ctx.shadowBlur=16;
+  ctx.fillStyle=color;
+  ctx.beginPath();ctx.roundRect(pad.x-pad.w/2,pad.y-pad.h/2,pad.w,pad.h,7);ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.fillStyle='rgba(255,255,255,0.22)';
+  ctx.beginPath();ctx.roundRect(pad.x-pad.w/2+6,pad.y-pad.h/2+2,pad.w-12,3,2);ctx.fill();
+}
+ 
+function drawSoesje(x,y){
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate(Math.sin(Date.now()*0.0022)*0.07);
+ 
+  // slagschaduw
+  ctx.shadowColor='rgba(0,0,0,0.55)';ctx.shadowBlur=14;ctx.shadowOffsetY=4;
+ 
+  // ── onderkant broodje ──
+  ctx.fillStyle='#6b3010';
+  ctx.beginPath();ctx.ellipse(0,5,R+2,R*0.58,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#b86830';
+  ctx.beginPath();ctx.ellipse(0,4,R+1,R*0.54,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#cc8040';
+  ctx.beginPath();ctx.ellipse(0,3,R*0.88,R*0.44,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#e09a55';
+  ctx.beginPath();ctx.ellipse(-2,0,R*0.7,R*0.32,-0.15,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(255,220,160,0.3)';
+  ctx.beginPath();ctx.ellipse(-6,-2,R*0.3,R*0.13,-0.3,0,Math.PI*2);ctx.fill();
+ 
+  ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+ 
+  // bakcracks onderkant
+  ctx.strokeStyle='rgba(70,25,5,0.4)';ctx.lineWidth=1.1;
+  for(let i=-1;i<=1;i++){
+    ctx.beginPath();ctx.moveTo(i*7,-1);
+    ctx.bezierCurveTo(i*7+1,3,i*7+1,6,i*7+2,9);ctx.stroke();
+  }
+ 
+  // ── slagroom vulling ──
+  ctx.fillStyle='#d8cfc0';
+  ctx.beginPath();ctx.ellipse(0,0,R+2,R*0.22,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fdf8f0';
+  ctx.beginPath();ctx.ellipse(0,0,R+1,R*0.18,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(200,185,155,0.55)';ctx.lineWidth=1;
+  for(let i=-1;i<=1;i++){
+    ctx.beginPath();ctx.moveTo(i*9-5,-1);
+    ctx.bezierCurveTo(i*9-2,1,i*9+2,1,i*9+5,-1);ctx.stroke();
+  }
+ 
+  // ── bovenkant broodje ──
+  ctx.fillStyle='#6b3010';
+  ctx.beginPath();ctx.ellipse(0,-4,R+2,R*0.52,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#b86830';
+  ctx.beginPath();ctx.ellipse(0,-5,R+1,R*0.48,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#cc8040';
+  ctx.beginPath();ctx.ellipse(0,-6,R*0.87,R*0.38,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#e09a55';
+  ctx.beginPath();ctx.ellipse(-2,-8,R*0.65,R*0.26,-0.15,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(255,225,165,0.35)';
+  ctx.beginPath();ctx.ellipse(-6,-10,R*0.28,R*0.1,-0.3,0,Math.PI*2);ctx.fill();
+ 
+  // bakcracks bovenkant
+  ctx.strokeStyle='rgba(70,25,5,0.35)';ctx.lineWidth=1.0;
+  for(let i=-1;i<=1;i++){
+    ctx.beginPath();ctx.moveTo(i*6,-3);
+    ctx.bezierCurveTo(i*6+1,-6,i*6+1,-8,i*6+2,-11);ctx.stroke();
+  }
+ 
+  // ── chocoladeglazuur ──
+  ctx.fillStyle='#1e0800';
+  ctx.beginPath();ctx.ellipse(0,-13,R*0.7,R*0.18,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#3a1205';
+  ctx.beginPath();ctx.ellipse(0,-13,R*0.62,R*0.145,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(255,160,60,0.22)';
+  ctx.beginPath();ctx.ellipse(-4,-14,R*0.26,R*0.065,-0.25,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(255,220,140,0.45)';
+  ctx.beginPath();ctx.ellipse(-6,-15,R*0.08,R*0.045,-0.3,0,Math.PI*2);ctx.fill();
+ 
+  ctx.restore();
+}
+ 
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  drawRink();
+  drawPaddle(player,'#2a70d8');
+  drawPaddle(aiPad, mode==='pvp'?'#d06820':'#d83a3a');
+  drawSoesje(puck.x,puck.y);
+}
+ 
+(function loop(){ update(); draw(); requestAnimationFrame(loop); })();
+ 
+/* input */
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const sx=W/rect.width, sy=H/rect.height;
+  const cx=(e.clientX-rect.left)*sx, cy=(e.clientY-rect.top)*sy;
+  if(mode==='pvp'){ if(cy>H/2)mouseX=cx; else mouse2X=cx; }
+  else mouseX=cx;
+});
+ 
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const rect=canvas.getBoundingClientRect();
+  const sx=W/rect.width, sy=H/rect.height;
+  for(const t of e.touches){
+    const cx=(t.clientX-rect.left)*sx, cy=(t.clientY-rect.top)*sy;
+    if(mode==='pvp'){ if(cy>H/2)mouseX=cx; else mouse2X=cx; }
+    else mouseX=cx;
+  }
+},{passive:false});
+</script>
+</body>
+</html>
