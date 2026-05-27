@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kleuren klikken</title>
+<style>
+    body {
+        margin: 0;
+        background: #0b0b12;
+        font-family: Arial, sans-serif;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    h1 {
+        color: #00f7ff;
+        text-shadow: 0 0 10px #00f7ff;
+        margin-bottom: 20px;
+    }
+
+    #word {
+        font-size: 60px;
+        font-weight: bold;
+        margin: 30px 0;
+        text-shadow: 0 0 20px currentColor;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 150px);
+        gap: 15px;
+        justify-content: center;
+    }
+
+    button {
+        padding: 15px;
+        font-size: 18px;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        color: white;
+        font-weight: bold;
+        transition: 0.2s;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    button:hover {
+        transform: scale(1.05);
+    }
+
+    .score {
+        margin-top: 20px;
+        font-size: 20px;
+        color: #ff00ff;
+        text-shadow: 0 0 10px #ff00ff;
+    }
+
+    .neon-blue { background: #00f7ff; box-shadow: 0 0 15px #00f7ff; }
+    .neon-red { background: #ff004c; box-shadow: 0 0 15px #ff004c; }
+    .neon-green { background: #00ff85; box-shadow: 0 0 15px #00ff85; }
+    .neon-yellow { background: #ffe600; color:black; box-shadow: 0 0 15px #ffe600; }
+    .neon-purple { background: #b400ff; box-shadow: 0 0 15px #b400ff; }
+    .neon-pink { background: #ff00d4; box-shadow: 0 0 15px #ff00d4; }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>KLEUREN KLIKKEN</h1>
+    <div id="word">Start</div>
+
+    <div class="buttons">
+        <button class="neon-blue" onclick="check('blauw')">Blauw</button>
+        <button class="neon-red" onclick="check('rood')">Rood</button>
+        <button class="neon-green" onclick="check('groen')">Groen</button>
+        <button class="neon-yellow" onclick="check('geel')">Geel</button>
+        <button class="neon-purple" onclick="check('paars')">Paars</button>
+        <button class="neon-pink" onclick="check('roze')">Roze</button>
+    </div>
+
+    <div class="score">Score: <span id="score">0</span></div>
+</div>
+
+<script>
+const colors = [
+    {name: "blauw", color: "#00f7ff"},
+    {name: "rood", color: "#ff004c"},
+    {name: "groen", color: "#00ff85"},
+    {name: "geel", color: "#ffe600"},
+    {name: "paars", color: "#b400ff"},
+    {name: "roze", color: "#ff00d4"}
+];
+
+let currentWord = "";
+let score = 0;
+
+function newRound() {
+    const randomWord = colors[Math.floor(Math.random() * colors.length)];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+    currentWord = randomWord.name;
+
+    const wordEl = document.getElementById("word");
+    wordEl.innerText = randomWord.name.toUpperCase();
+    wordEl.style.color = randomColor.color;
+}
+
+function check(answer) {
+    if (answer === currentWord) {
+        score++;
+    } else {
+        score = 0;
+    }
+
+    document.getElementById("score").innerText = score;
+    newRound();
+}
+
+newRound();
+</script>
+</body>
+</html>
