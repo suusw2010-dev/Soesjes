@@ -35,11 +35,26 @@ body {
     display: flex;                  
     align-items: center;             
     background-color: #f48fb1;          
-    padding: 10px 20px;   
+    padding: 25px 30px;   
     position: sticky;
     top: 0;
     z-index: 9999;
-    justify-content: space-between;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.main-menu a{
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.main-menu a:hover{
+    opacity: 0,7;
+    color: #000000
 }
 /* GRID */
 .grid {
@@ -62,11 +77,11 @@ body {
 .card:hover {
     transform: translateY(-8px);
 }
-
+.blue { background: linear-gradient(135deg,   #f0fd0092, #f6fc88); }
+.green { background: linear-gradient(135deg, #ff428e, #ffabcc); }
+.purple { background: linear-gradient(135deg, #0077ff, #a5cfff); }
+.pink{ background: linear-gradient(135deg, #85009a, hsl(287, 84%, 76%)); }
 /* COLORS */
-.Yellow { background: linear-gradient(135deg,   #ff428e, #ffabcc); }
-.Pink { background: linear-gradient(135deg, #f0fd0092, #f6fc88); }
-.Blue { background: linear-gradient(135deg, #0077ff, #a5cfff); }
 
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -193,7 +208,111 @@ body {
 .info-container:hover .info-tekst {
     display: block;
 }
-/* FOOTER */
+
+ *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      background: #0d1a0d;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px 10px 30px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #e8f5e8;
+    }
+ 
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #f5d78e;
+      text-shadow: 0 0 20px rgba(245,215,142,0.4);
+      margin-bottom: 14px;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+ 
+    /* ── mode selector ── */
+    #mode-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    #mode-row span {
+      font-size: 13px;
+      color: #8bba8b;
+      margin-right: 4px;
+    }
+    .mode-btn {
+      padding: 7px 18px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color: #c8e8c8;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .mode-btn:hover   { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.3); }
+    .mode-btn.active  { background: rgba(100,200,100,0.18); border-color: rgba(100,220,100,0.55); color: #b0ffb0; }
+ 
+    /* ── scorebord ── */
+    #score-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 640px;
+      max-width: 95vw;
+      margin-bottom: 8px;
+    }
+    .score-block { text-align: center; min-width: 80px; }
+    .score-label { font-size: 11px; color: #8bba8b; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 1px; }
+    .score-num   { font-size: 40px; font-weight: 700; line-height: 1; }
+    #score-player .score-num { color: #6aafff; }
+    #score-ai     .score-num { color: #ff7070; }
+    #status { font-size: 13px; color: #8bba8b; font-style: italic; text-align: center; min-width: 150px; }
+ 
+    /* ── canvas ── */
+    #canvas {
+      display: block;
+      width: 640px;
+      max-width: 95vw;
+      height: auto;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.07);
+      cursor: none;
+      touch-action: none;
+      box-shadow: 0 0 40px rgba(0,70,0,0.5);
+    }
+ 
+    /* ── controls ── */
+    #controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    button.ctrl {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #d4f0d4;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    button.ctrl:hover  { background: rgba(255,255,255,0.14); }
+    button.ctrl:active { transform: scale(0.97); }
+ 
+    #hint { font-size: 12px; color: rgba(140,180,140,0.45); margin-top: 8px; text-align: center; }
+
+    /* FOOTER */
 footer {
     text-align: center;
     padding: 20px;
