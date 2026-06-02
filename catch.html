@@ -2,7 +2,8 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Neon Soesjes Game</title>
+<title>Emoji Catch Game</title>
+
 <style>
 body {
     margin: 0;
@@ -12,39 +13,35 @@ body {
     color: white;
 }
 
-/* Canvas */
 canvas {
     display: block;
 }
 
-/* UI overlay */
 #ui {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.7);
+    text-align: center;
 }
 
 button {
     padding: 15px 30px;
     font-size: 20px;
-    background: #00fff2;
+    background: #ff00ff;
     border: none;
-    color: black;
-    cursor: pointer;
+    color: white;
     border-radius: 10px;
-    box-shadow: 0 0 20px #00fff2;
-    margin-top: 10px;
+    box-shadow: 0 0 20px #ff00ff;
+    cursor: pointer;
+    margin-top: 15px;
 }
 
 h1 {
-    color: #ff00ff;
     text-shadow: 0 0 20px #ff00ff;
 }
 
@@ -53,16 +50,17 @@ h1 {
     top: 10px;
     left: 10px;
     font-size: 20px;
-    text-shadow: 0 0 10px #00fff2;
 }
 </style>
 </head>
+
 <body>
 
 <div id="score">Score: 0</div>
 
 <div id="ui">
-    <h1>Neon Soesjes Catch</h1>
+    <h1>🍩 Catch Game</h1>
+    <p>Vang de 🍩<br>Vermijd de 🥦</p>
     <button onclick="startGame()">START</button>
 </div>
 
@@ -75,7 +73,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let basket = { x: canvas.width/2, y: canvas.height - 80, w: 120, h: 20 };
+let basket = { x: canvas.width/2, y: canvas.height - 80, w: 150, h: 20 };
 let items = [];
 let score = 0;
 let speed = 2;
@@ -102,53 +100,55 @@ function gameOver() {
     document.getElementById("ui").innerHTML = `
         <h1>GAME OVER</h1>
         <p>Score: ${score}</p>
-        <button onclick="startGame()">RESTART</button>
+        <button onclick="location.reload()">RESTART</button>
     `;
 }
 
 function spawnItem() {
-    const isSoesje = Math.random() < 0.6;
+    const isGood = Math.random() < 0.6;
 
     items.push({
         x: Math.random() * canvas.width,
         y: -20,
-        r: 15,
-        type: isSoesje ? "soesje" : "bad",
-        glow: isSoesje ? "#ff00ff" : "#00fff2"
+        r: 20,
+        type: isGood ? "donut" : "veg",
+        emoji: isGood ? "🍩" : "🥦"
     });
 }
 
 function drawBasket() {
     basket.x += (mouseX - basket.x) * 0.2;
 
+    ctx.fillStyle = "#ffffff";
     ctx.shadowBlur = 20;
-    ctx.shadowColor = "#00fff2";
-    ctx.fillStyle = "#00fff2";
+    ctx.shadowColor = "#ffffff";
     ctx.fillRect(basket.x - basket.w/2, basket.y, basket.w, basket.h);
 }
 
 function drawItems() {
+    ctx.font = "30px Arial";
+    ctx.textAlign = "center";
+
     for (let i = 0; i < items.length; i++) {
         let it = items[i];
         it.y += speed;
 
-        ctx.beginPath();
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = it.glow;
-        ctx.fillStyle = it.glow;
-        ctx.arc(it.x, it.y, it.r, 0, Math.PI*2);
-        ctx.fill();
+        // teken emoji
+        ctx.fillText(it.emoji, it.x, it.y);
 
-        // collision
-        if (
-            it.y + it.r > basket.y &&
-            it.x > basket.x - basket.w/2 &&
-            it.x < basket.x + basket.w/2
-        ) {
-            if (it.type === "soesje") {
+        // collision (op basis van cirkel rond emoji)
+        const closestX = Math.max(basket.x - basket.w/2, Math.min(it.x, basket.x + basket.w/2));
+        const closestY = Math.max(basket.y, Math.min(it.y, basket.y + basket.h));
+
+        const dx = it.x - closestX;
+        const dy = it.y - closestY;
+        const distance = Math.sqrt(dx*dx + dy*dy);
+
+        if (distance < it.r * 0.8) {
+            if (it.type === "donut") {
                 score++;
                 items.splice(i,1);
-                speed += 0.05;
+                speed += 0.1;
             } else {
                 gameOver();
             }
